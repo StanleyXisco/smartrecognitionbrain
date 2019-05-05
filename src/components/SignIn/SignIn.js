@@ -1,5 +1,5 @@
 import React from 'react';
-const axios = require('axios');
+
 
 
 
@@ -22,27 +22,19 @@ class SignIn extends React.Component {
 	}
 
 	onSubmitChange = () => {
-		let postData = JSON.stringify({
-		  email: this.state.signInEmail,
-		  password: this.state.signInPassword
-		});
-
-		let axiosConfig = {
-		  headers: {
-		      'Content-Type': 'application/json;charset=UTF-8',
-		      "Access-Control-Allow-Origin": "*"
-		  }
-		}
-
-		axios.post('http://localhost:3000/signin', postData, axiosConfig)
-			.then(res => {
-				  if (res === 'success')  {
-				  	this.props.onRouteChange('home');
-				  }
-				})
-					.catch((err) => {
-					  console.log("AXIOS ERROR: ", err);
-					})
+		fetch('http://localhost:3000/signin', {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify({
+				email: this.state.signInEmail,
+				password: this.state.signInPassword
+			})
+		}).then(response => response.json())
+		.then(data => {
+			if (data==='success') {
+				this.props.onRouteChange('home');
+			}
+		})
 		
 	} 
 	render() {
